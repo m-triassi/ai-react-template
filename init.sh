@@ -168,7 +168,26 @@ else
 fi
 
 
-# 5. Remind user about secrets
+# 5. Attempt to create Cloudflare Pages project
+echo "4. Checking for Cloudflare Wrangler CLI..."
+if command -v wrangler >/dev/null 2>&1; then
+  echo -e "   ${GREEN}Wrangler CLI found.${NC} Attempting to create Pages project..."
+  echo -e "   (You may be prompted to log in if you haven't already.)"
+
+  if wrangler pages project create "${REPLACEMENTS[":application_title"]}"; then
+    echo -e "   ${GREEN}Successfully created Cloudflare Pages project: ${REPLACEMENTS[":application_title"]}${NC}"
+  else
+    echo -e "   ${YELLOW}Wrangler command failed.${NC} Project creation may have been unsuccessful."
+    echo -e "   ${YELLOW}This is okay! You can create it manually in the Cloudflare dashboard.${NC}"
+  fi
+
+else
+  echo -e "   ${YELLOW}Wrangler CLI not found.${NC} Skipping automatic project creation."
+  echo "   You can create the project manually in the Cloudflare dashboard."
+fi
+
+
+# 6. Remind user about secrets (was step 5)
 echo
 echo -e "${GREEN}--- Initialization Complete! ---${NC}"
 echo
@@ -178,7 +197,8 @@ echo "To enable deployments, you must configure your GitHub repository:"
 echo
 echo "1. ${CYAN}Create Cloudflare Pages Project:${NC}"
 echo "   - Go to your Cloudflare dashboard and create a new Pages project."
-echo "   - Connect it to this GitHub repository."
+echo "   - Choose the option to upload files directly."
+echo "   - Once created you may exit the page, as the GitHub action will upload the files for you."
 echo
 echo "2. ${CYAN}Set GitHub Repository Secrets:${NC}"
 echo "   - In this repo, go to: ${GREEN}Settings > Secrets and variables > Actions${NC}"
@@ -192,7 +212,7 @@ echo "     (Find this on your main Cloudflare dashboard page)"
 echo "--------------------------------------------------------------------------"
 echo
 
-# 6. Delete this script
+# 7. Delete this script (was step 6)
 echo "Deleting this initialization script."
 rm -- "$0"
 
