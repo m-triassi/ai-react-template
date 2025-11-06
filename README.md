@@ -43,7 +43,7 @@ To get a local copy up and running, follow these simple steps.
 
 1.  **Clone the repository:**
     ```sh
-    git clone [https://github.com/your-username/:application_title.git](https://github.com/your-username/:application_title.git)
+    git clone git@github.com:your-username/:application_title.git
     cd :application_title
     ```
 
